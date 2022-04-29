@@ -6,7 +6,7 @@ import ascii_art
 player_stat = {
     "Name": " ",
     "HP" : 43,
-    "Max_Health":50,
+    "Max_Health":43,
     "Defends": 6,
     "Hit_Chance" : 0.7,
     "Attack": 15,
@@ -17,12 +17,12 @@ bear_stat = {
     "Max_Health":20,
     "Defends": 5,
     "Hit_Chance" : 0.6,
-    "Attack": 10,
+    "Attack": 15,
 }
 dragon_stat = {
     "Name": "Dragon",
-    "HP" : 50,
-    "Max_Health":40,
+    "HP" : 60,
+    "Max_Health":60,
     "Defends": 10,
     "Hit_Chance" : 0.5,
     "Attack": 20,
@@ -39,6 +39,9 @@ bear_boss=True
 chest_key=False
 
 def start():
+    time.sleep(1)
+    ascii_art.print_ascii_art(ascii_art.the_cave)
+    time.sleep(1)
     get_player_name()
     delay_print("""
 Adventurer, you see a cave in the distance you start to approach it. 
@@ -134,13 +137,13 @@ def Tunnel_of_Courage():
     global player_stat
     global bear_stat
     if bear_boss: 
-        delay_print("Do you wish to fight the bear or attempt to escape?",0.02)
+        delay_print("Do you wish to fight the bear or attempt to escape?",0.05)
         print("1).Fight \n2).Escape")
         try:
             fight_or_not = int(input())
         except:
             print("Invalid input, please enter a number.\n")
-            Tunnel_of_Courage()
+            fight_or_not = int(input())
         
         if fight_or_not ==1:
             time.sleep(1)
@@ -155,16 +158,16 @@ def Tunnel_of_Courage():
                 combat_turn(bear_stat,counter)
                 
                 if player_stat["HP"]<=0:
-                    delay_print("you have been deafeated by Bear",0.05)
+                    delay_print("you have been deafeated by Bear",0.1)
                     game_over()
                 elif bear_stat["HP"]<=0:
-                    delay_print("you have defeated the bear", 0.05)
+                    delay_print("you have defeated the bear", 0.1)
                     time.sleep(0.5)
                     ascii_art.print_ascii_art(ascii_art.bear_ko)
-                    delay_print("You have obtained a key and recoved to full health.",0.03)
+                    delay_print("You have obtained a key and recoved to full health.",0.1)
                     time.sleep(2)
                     ascii_art.print_ascii_art(ascii_art.key)
-                    delay_print("You have obtained a sword. Your attack incresed by 20" ,0.05)
+                    delay_print("You have obtained a sword. Your attack incresed by 20" ,0.1)
                     time.sleep(2)
                     player_stat["HP"]=player_stat["Max_Health"]
                     ascii_art.print_ascii_art(ascii_art.sword)
@@ -172,7 +175,7 @@ def Tunnel_of_Courage():
                     chest_key=True
                     bear_boss=False
                     time.sleep(2)
-                    delay_print("You have returned to the entrance",0.03)
+                    delay_print("You have returned to the entrance",0.05)
                     cave_entrance()
                 counter+=1
                             
@@ -233,13 +236,13 @@ you tremble with fear, as you try to hide you see a shiny gold chest hidden behi
 The greed consumes you, you can't help but think that the key you obtained earlier could unlock this chest! 
 You approach cautiously and insert the key into the locked chest, as you turn the key you hear a clank IT WORKS! 
 You open the chest and see enough treasure to last a life time!!!
-But wait! OH NO!""",0.04) 
+But wait! OH NO!""",0.05) 
 
         ascii_art.print_ascii_art(ascii_art.dragon_stare)
         delay_print("Please press enter to continue.",0.05)
         input()
-        delay_print("The dragon has awoke from its slumber!", 0.05)
         ascii_art.print_ascii_art(ascii_art.dragon)
+        delay_print("The dragon has awoke from its slumber!", 0.05)
         delay_print("You see his eyes glow with the colour of fire, as his mouth opens wide you can feel the heat of the flames and with an almight roar the flames attempt to consume you! ",0.05)
         delay_print("Dodge you roll out the way of the flames and attempt to counter with a strike of your own lowering the dragons HP",0.05)
         delay_print("Press enter to begin the fight. ",0.05)
@@ -258,12 +261,12 @@ But wait! OH NO!""",0.04)
                 delay_print("The dragon attacks again although wounded it still manages to spit fire!", 0.05)
                 delay_print("You dodge again and are able to deliver the killing blow!", 0.05)
                 delay_print("VICTORY You have slain the dragon and can now bask in the chest of treasures awaiting you!",0.05)
-                quit()
+                ascii_art.print_ascii_art(ascii_art.thank_you)
             counter+=1
+            time.sleep(1)
     else:
-        delay_print("""You do not have the key, please obtain it and then return to this room.
-Return to the entrance
-""",0.05)
+        delay_print("You do not have the key, please obtain it and then return to this room.",0.05)
+        delay_print("Returned to the entrance", 0.05)
         cave_entrance()
 
 def combat_turn(enemy,counter):
@@ -271,11 +274,12 @@ def combat_turn(enemy,counter):
     name=enemy["Name"]
     player_name=player_stat["Name"]
     if Counter%2 == 0:
-        delay_print(f"Turn {Counter},it the {name}'s turn.",0.05)
+        delay_print(f"Turn {Counter}, it the {name}'s turn.",0.07)
         time.sleep(1)
         attack(enemy,player_stat)
     else:
-        delay_print(f"Turn {Counter},it {player_name}'s turn.",0.02)
+        delay_print(f"Turn {Counter},it {player_name}'s turn.",0.07)
+        time.sleep(1)
         combat(enemy)
 
 def combat(target):
@@ -333,28 +337,38 @@ def attack(attacker,defender):
     if hit_roll <=(attacker["Hit_Chance"])*10: 
         damage=attacker["Attack"]-defender["Defends"]
         defender["HP"]-=damage
+        time.sleep(1)
         print("Successfull hit, {} have {} Attack and {} have {} Defends, {} -{}HP".format(attacker["Name"],attacker["Attack"],defender["Name"],defender["Defends"],defender["Name"],damage))
         print(defender["Name"]+" current health is " + str(defender["HP"]) + "/"+str(defender["Max_Health"]) + "\n")
     else:
-        delay_print("Attack missed\n",0.06)
+        delay_print("Attack missed",0.06)
 
 def check_stat(t):
-    print("Name: {}, HP:{}, Defends : {}, Hit Chance: {}%, Attack: {}".format(t["Name"],t["HP"],t["Defends"],t["Hit_Chance"]*100,t["Attack"]))
+    print("Name: {}, HP:{}/{}, Defends : {}, Hit Chance: {}%, Attack: {}".format(t["Name"],t["HP"],t["Max_Health"],t["Defends"],t["Hit_Chance"]*100,t["Attack"]))
 
 def game_over():
-      ascii_art.print_ascii_art(ascii_art.game_over)
-      delay_print("\nDo you want to play again? Y/N",0.1)
-      if input().lower()=="y":
-            start()
-      else:
-            quit()
+    global chest_key
+    global bear_stat
+    global bear_boss 
+    ascii_art.print_ascii_art(ascii_art.game_over)
+    delay_print("\nDo you want to play again? Y/N",0.1)
+    if input().lower()=="y":
+        bear_stat["HP"]=bear_stat["Max_Health"]
+        chest_key=False
+        bear_boss=True
+        start()
             
+    else:
+        quit()
+            
+
+start()
+
 # wish_to_enter()
 # # print line, 2 speed 
 # random_riddles()
-Tunnel_of_Courage()
+# Tunnel_of_Courage()
 # tunnel_of_death()
 # chest_key=True
 # Tunnel_of_Greed()
      
-#start()
