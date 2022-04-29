@@ -349,11 +349,16 @@ def check_stat(t):
 def game_over():
     global chest_key
     global bear_stat
-    global bear_boss 
+    global bear_boss
+    global dragon_stat 
+    global player_stat
     ascii_art.print_ascii_art(ascii_art.game_over)
     delay_print("\nDo you want to play again? Y/N",0.1)
     if input().lower()=="y":
         bear_stat["HP"]=bear_stat["Max_Health"]
+        dragon_stat["HP"]=dragon_stat["Max_Health"]
+        player_stat["HP"]=player_stat["Max_Health"]
+        player_stat["Attack"]-=20
         chest_key=False
         bear_boss=True
         start()
