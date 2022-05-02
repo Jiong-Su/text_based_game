@@ -358,7 +358,7 @@ def game_over():
         bear_stat["HP"]=bear_stat["Max_Health"]
         dragon_stat["HP"]=dragon_stat["Max_Health"]
         player_stat["HP"]=player_stat["Max_Health"]
-        player_stat["Attack"]-=20
+        player_stat["Attack"]=15
         chest_key=False
         bear_boss=True
         start()
